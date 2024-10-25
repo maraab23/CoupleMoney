@@ -36,7 +36,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Save package names as a vector of strings
 pkgs <- c("glue", "tidyverse", "gt", "gtExtras", "haven",
-          "here", "scales", "showtext")
+          "here", "scales", "showtext", "fontawesome")
 
 
 # Options that might help to prevent some errors in the installation process
@@ -73,7 +73,7 @@ rm(startingdir)
 
 ```
 
-This document contains supplementary material for our visualization of couples' money arrangements in Germany. The code files used for editing the source data and generating the visualization as well as this document (including the tables) are available on GitHub (link to the repository will be added after review).
+This document contains supplementary material for our visualization of couples' money arrangements in Germany. The code files used for editing the source data and generating the visualization as well as this document (including the tables) are available on [`r fa("github")` GitHub](https://github.com/maraab23/CoupleMoney).
 
 The visualization and this supplement build on previous work of @pepin2022 and are, therefore, similarly structured. While Pepin has focused on US data and differences in money arrangements by marital and parental status, by age group, and for different-gender and same-gender couples, we utilized the unique cohort-sequence design of the German Family Panel ("pairfam") that allows for between and within cohort comparisons.
 
