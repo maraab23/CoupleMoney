@@ -1,6 +1,6 @@
 
 
-# Couples’ money arrangements in Germany:<br>A visualization of cohort, age group, and partnership type variations
+# Couples' money arrangements in Germany:<br>A visualization of cohort, age group, and partnership type variations
 
 ### [Marcel Raab](https://marcelraab.de/) & [Florian Schulz](https://flociologist.github.io/)
 
