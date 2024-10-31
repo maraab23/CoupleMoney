@@ -15,6 +15,7 @@ format:
   html:
     theme: [cosmo, custom.scss]
     embed-resources: true
+output-file: index.html
 editor: 
   markdown: 
     wrap: sentence

@@ -1,0 +1,211 @@
+---
+title: "Couples' money arrangements in Germany: A visualization of cohort, age group, and partnership type variations"
+subtitle: "Supplementary Material"
+title-block-banner: "#b52f45" 
+title-block-banner-color: "#FFFFFF"
+author: 
+   - name: Marcel Raab
+     orcid: 0000-0002-3097-1591
+   - name: Florian Schulz
+     orcid: 0000-0002-3865-6668
+date: "`r Sys.time()`"
+date-format: medium
+published-title: "Date"
+format: docx
+filters:
+  - docx-landscape.lua
+editor: 
+  markdown: 
+    wrap: sentence
+bibliography: references.bib
+csl: asa.csl 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+#options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+
+
+## Save package names as a vector of strings
+pkgs <- c("glue", "tidyverse", "gt", "gtExtras", "haven",
+          "here", "scales", "showtext")
+
+
+# Options that might help to prevent some errors in the installation process
+options(install.packages.check.source = "no")
+options(install.packages.compile.from.source = "never")
+
+
+## Install uninstalled packages
+lapply(pkgs[!(pkgs %in% installed.packages())], 
+       install.packages, repos = getOption("repos")["CRAN"])
+
+
+## Load all packages to library and adjust options
+lapply(pkgs, library, character.only = TRUE)
+
+
+
+rm(list = ls())
+
+# add font for plot
+font_add_google("Roboto Condensed", "Roboto Condensed")
+showtext_auto()
+
+
+# import data
+startingdir <- here()
+
+load(paste(
+  startingdir, "data", "posted", "02_cplcash_plus_tbls.RData", sep = "/")
+  )
+
+
+rm(startingdir)
+
+```
+
+This document contains supplementary material for our visualization of couples' money arrangements in Germany. The code files used for editing the source data and generating the visualization as well as this document (including the tables) are available on [GitHub](https://github.com/maraab23/CoupleMoney).
+
+The visualization and this supplement build on previous work of @pepin2022 and are, therefore, similarly structured. While Pepin has focused on US data and differences in money arrangements by marital and parental status, by age group, and for different-gender and same-gender couples, we utilized the unique cohort-sequence design of the German Family Panel ("pairfam") that allows for between and within cohort comparisons.
+
+<br>  
+
+## Data
+
+The visualization and the supplementary tables are based on data from the German Family Panel (pairfam), [release 13.0](https://doi.org/10.4232/pairfam.5678.13.0.0){target="_blank"} [@bruederl].
+The annually collected survey data from a nationwide random sample comprised data from the three birth cohorts 1971-73, 1981-83, and 1991-93.
+We used data from waves 1 and 9, collected in 2008/09 and 2016/2017.
+We applied calibrated design weights adjusting the samples to central characteristics of the German population for the three initial cohorts.
+A detailed description of the study can be found in @Huinink2011.
+
+<br>  
+
+## Sample construction {#sec-sample}
+
+Our analytical approach took advantage of pairfam’s cohort-sequence design that allows for comparing distributions of variables measured for different cohorts at the same age and for members of the same cohort at different ages.
+Specifically, our analysis included two cohort comparisons of couples' money arrangements: the first compares persons aged 34 to 36 from the birth cohort 1971-1973 and the birth cohort 1981-1983; the second comprised persons aged 24 to 26 from the birth cohort 1991-1993 and the birth cohort 1981-1983.
+
+The sample construction aimed at comparing like with like; hence, we only kept persons from overlapping age ranges (e.g., persons from cohort 1981-1983 aged 32 to 33 were not considered because we did not observe equally aged persons in cohort 1971-1973).
+
+As the birth cohort 1981-1983 contributed twice, we also show the respective within-cohort comparison for two age groups mentioned above.
+Survey data for these comparisons came from pairfam waves 1 and 9, collected in 2008/09 and 2016/17.
+Our starting sample (with overlapping age groups) included `r comma_format()(reporting$step_01$n_new)` cases.
+
+We restricted this baseline sample to respondents living in a partnership by deleting `r comma_format()(reporting$step_02$n)` cases with a missing value on partnership status and `r comma_format()(sum(reporting$step_03$n[reporting$step_03$pstatus == "Single"]))` respondents who reported being single.
+Finally, we deleted another `r comma_format()(reporting$step_04$n_miss)` cases with missing information on the couples' financial arrangements.
+
+This yielded a final sample size of `r comma_format()(sum(reporting$step_03$n[reporting$step_03$pstatus != "Single"]))`.
+As members of the middle birth cohort could contribute twice (wave 1 and 9), this number does not represent the number of distinct respondents.
+In fact, `r filter(data_long, cohort==2) |> count(id) |> count(n, name = "nn") |> pull(nn) |> last()` respondents appeared twice in the final data.
+That is, `r data_long |> filter(cohort==2) |> nrow() |> (\(x) comma_format()(x))()` observations for this cohort came from `r filter(data_long, cohort==2) |> count(id) |> count(n, name = "nn") |> pull(nn) |> sum() |> (\(x) comma_format()(x))()` respondents.
+Cohort 1971-1973 contributed `r data_long |> filter(cohort==3) |> nrow() |> (\(x) comma_format()(x))()` cases; the youngest cohort (1991-1993) constituted the smallest group (n = `r data_long |> filter(cohort==1) |> nrow() |> (\(x) comma_format()(x))()`).
+
+<br>  
+
+## Measurement of couples' money arrangements
+
+We followed the categorization of @pepin2022 ---*(1) We keep all of our money separately, (2) Put some money together, or (3) Put all of our money together*---and applied it to the pairfam question shown in @fig-1.
+As already mentioned, only very few cases did not respond to this question (`r comma_format()(reporting$step_04$n_miss)` of `r comma_format()(reporting$step_04$total)` cases, corresponding to `r reporting$step_04$share` of the analysis sample).
+
+::: {#fig-1}
+![](images/Q-248.png){width="85%"}
+
+Snapshot from pairfam (wave 1) questionnaire @pairfamgroup2022 [p. 126]
+:::
+
+
+We implemented Pepin's [-@pepin2022] coding scheme by applying following categorization:
+
+- Put all money together
+	+ If the respondent exclusively mentioned "inc19i1" 
+	
+- Put some money together
+	+ If the respondent mentioned "inc19i1" and at least one other option
+	+ If inc19i2 or inc19i3 were mentioned (irrespective of which other options have been chosen)
+	
+- Keep all money separate
+	+ If the respondent mentioned "inc19i4" and/or "inc19i5" and neither of the other three options
+
+<br>  
+
+## Distribution of partnership states
+
+Cohort and age group differences in couples' money arrangements were considerably affected by group-specific differences in the distribution of partnership states, as shown in @tbl-pstatus. Accordingly, our visualization shows couples' money arrangements for entire cohorts or age groups and separately by partnership states. The statistical tests for group differences displayed in the next section proceeded accordingly.
+
+```{r}
+#| label: tbl-pstatus
+#| tbl-cap: ""
+#| cap-location: top
+knitr::include_graphics(here("tables", "tab_1.png"))
+```
+
+<br>  
+
+## Examining group differences with ${\chi}^2$-tests
+
+We computed design-adjusted Rao‐Scott ${\chi}^2$-tests to test for statistical differences within and between cohorts.
+These tests use survey calibrated design weights aiming "to adjust the data to the target population and simultaneously control for baseline survey participation and panel attrition bias" [@bruederl2022, p. 63]. The tables below display unweighted and weighted frequencies to provide information about the cell sizes and row percentages to ease the comparisons across different sub groups. For both between and within cohort comparisons, we analyzed group differences for the total sample and by partnership status.
+
+<br>  
+
+### Test of cohort differences
+
+The tests displayed in @tbl-cohort suggested that couples' money arrangements were not equally distributed across cohorts. A fine-grained analysis by partnership status indicated that this result was mainly driven by the notable cohort differences among married respondents.
+
+::: column-page
+```{r}
+#| label: tbl-cohort
+#| tbl-cap: "" 
+#| cap-location: top
+knitr::include_graphics(here("tables", "tab_2.png"))
+```
+:::
+
+<br> 
+
+### Test of age group differences within cohort 1981-1983
+
+@tbl-cohort2 shows that couples' money arrangements among members of the birth cohort 1981-1983 differed across age. Breaking down the comparisons by partnership status revealed that the age groups only differed significantly among the married respondents. Younger married persons were less likely to pool their money entirely. 
+
+
+::: column-page
+```{r}
+#| label: tbl-cohort2
+#| tbl-cap: ""
+#| cap-location: top
+knitr::include_graphics(here("tables", "tab_3.png"))
+```
+:::
+
+<br>
+
+## Parental status
+
+Due to sample size limitations, the main document focuses on differences in couples' money arrangements by partnership status. @fig-2 presents a more detailed analysis that additionally differentiates by parental status. Given the small sample sizes and skewed distributions, the analysis was restricted to individuals who are cohabiting or married and who are from the two older birth cohorts. For the married respondents the results were consistent with those shown in Figure 1 of the main article. While there were level differences between parents and childless respondents, both groups showed a decline in joint pooling across cohorts and age groups. A similar pattern was observed among parents in co-residential unions. 
+
+
+:::: landscape
+
+::: {#fig-2}
+![](plots/the_plot_parental.svg)
+
+The plot shows percentages using calibrated design weights adjusting the samples to central characteristics of the German population for the two cohorts 1971/73 and 1981/83. <br> 
+Data: German Family Panel (pairfam), release 13.0, waves 1 and 9.
+
+:::
+
+::::
+
+
+
+## Data availability statement
+
+The data of the German Family Panel (pairfam) is available for scientific purposes from GESIS Leibniz Institute for the Social Sciences: [https://doi.org/10.4232/pairfam.5678.13.0.0](https://doi.org/10.4232/pairfam.5678.13.0.0){target="_blank"}
+
+<br>
+
+<br>
+
+## References
+
