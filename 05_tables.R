@@ -114,6 +114,9 @@ pstatus_tbl <- pstatus_tbl |>
 pstatus_tbl |>  
   gtsave(here("tables", "tab_1.png"), expand = 10)
 
+pstatus_tbl |>  
+  gtsave(here("tables", "tab_1.html"), inline_css = TRUE)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,6 +216,9 @@ cohort_tbl <- cohort_tbl |>
 cohort_tbl |>  
   gtsave(here("tables", "tab_2.png"), zoom = 2, expand = 2000)
 
+cohort_tbl |>  
+  gtsave(here("tables", "tab_2.html"), inline_css = TRUE)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -304,6 +310,9 @@ age_coh2_tbl <- age_coh2_tbl |>
 
 age_coh2_tbl  |>  
   gtsave(here("tables", "tab_3.png"), zoom = 2, expand = 2000)
+
+age_coh2_tbl  |>  
+  gtsave(here("tables", "tab_3.html"), inline_css = TRUE)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
